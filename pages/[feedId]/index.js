@@ -36,7 +36,7 @@ export async function getStaticPaths(context){
   conection.close();
 
   return {
-    fallback: false,
+    fallback: 'blocking',
     paths: feeds.map(feed => ({ params: { feedId: feed._id.toString() } }))
   }
 }
