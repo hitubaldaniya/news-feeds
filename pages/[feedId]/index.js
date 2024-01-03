@@ -1,7 +1,7 @@
 import FeedDetails from "@/components/feeds/FeedDetails";
-import { getFeeds } from '../helper/helper';
 import { Fragment } from "react";
 import Head from 'next/head'
+import { MongoClient, ObjectId } from "mongodb";
 
 function FeedDetail(props){
   return (
@@ -27,7 +27,14 @@ export default FeedDetail;
 
 export async function getStaticPaths(context){
 
-  const feeds = (await getFeeds('ids')).data;
+  const conection = await MongoClient.connect('mongodb+srv://hitesh123:hitesh123@cluster0.udlyqcz.mongodb.net/feeds?retryWrites=true&w=majority');
+  const db = conection.db();
+  const feedCollection = db.collection('feeds');
+  
+  let feeds = await feedCollection.find({}, {  _id: 1 }).toArray();
+  
+  conection.close();
+
   return {
     fallback: false,
     paths: feeds.map(feed => ({ params: { feedId: feed._id.toString() } }))
@@ -35,9 +42,16 @@ export async function getStaticPaths(context){
 }
 
 export async function getStaticProps(context){
-    // fetch data
+  // fetch data
   const id = context.params.feedId.toString();
-  const singleFeed = ((await getFeeds(id)).data);
+  
+  const conection = await MongoClient.connect('mongodb+srv://hitesh123:hitesh123@cluster0.udlyqcz.mongodb.net/feeds?retryWrites=true&w=majority');
+  const db = conection.db();
+  const feedCollection = db.collection('feeds');
+  
+  let singleFeed = await feedCollection.findOne({"_id": new ObjectId(id)});
+  
+  conection.close();
   
   return {
       props : {

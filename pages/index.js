@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import FeedList from "@/components/feeds/FeedList";
-import { getFeeds } from './helper/helper';
 import { Fragment } from 'react';
+import { MongoClient } from "mongodb";
 
 function HomePage(props){
     return (
@@ -20,8 +20,14 @@ function HomePage(props){
 
 export async function getStaticProps(){
 
-    const feeds = (await getFeeds()).data;
-    // console.log(`FEEDS, ${JSON.stringify(feeds)}`)
+    const conection = await MongoClient.connect('mongodb+srv://hitesh123:hitesh123@cluster0.udlyqcz.mongodb.net/feeds?retryWrites=true&w=majority');
+    const db = conection.db();
+    const feedCollection = db.collection('feeds');
+    
+    let feeds = await feedCollection.find().toArray();
+    
+    conection.close();
+
     return {
         props : {
             feeds: feeds.map(feed => ({
