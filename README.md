@@ -1,5 +1,5 @@
 ## Next.js news feed with cloud mongodb 
-### Live at [https://news-feeds-psi.vercel.app/](https://news-feeds-psi.vercel.app/)
+### Live at [https://news-feeds-psi.vercel.app/](https://news-feeds-psi.vercel.app/){:target="_blank"}
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
